@@ -87,14 +87,24 @@ def get_username():
     else:
         return "Anonymous"  # Default name if the user doesn't enter anything
 
+# Function to ask the user for the port number
+def get_port():
+    port = simpledialog.askinteger("Enter port number", "Please enter the server port number:")
+    if port:
+        return port
+    else:
+        return 5555  # Default port number if the user doesn't enter anything
+
 # Function to attempt to connect to the server and open the chat window
 def connect_to_server(ip_address):
-    server_port = 5555
+    # Ask for the port number
+    server_port = get_port()
+
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
         client.connect((ip_address, server_port))
-        print(f"Connected to server at {ip_address}.")
+        print(f"Connected to server at {ip_address}:{server_port}.")
 
         # Ask for the username after connection
         username = get_username()
@@ -104,33 +114,13 @@ def connect_to_server(ip_address):
 
     except Exception as e:
         print(f"Error connecting to server: {e}")
+        print(f"Could not connect to {ip_address}:{server_port}")
 
-# Function to create the initial window where the user enters the server IP address
-def start_initial_window():
-    initial_window = tk.Tk()
-    initial_window.title("Enter Server IP Address")
-
-    # Label for the IP entry prompt
-    ip_label = tk.Label(initial_window, text="Enter the server IP address:")
-    ip_label.pack(padx=10, pady=10)
-
-    # Entry widget for the IP address
-    ip_entry = tk.Entry(initial_window, width=30)
-    ip_entry.pack(padx=10, pady=10)
-
-    # Function to handle the connect button click
-    def on_connect_button_click():
-        ip_address = ip_entry.get()
-        if ip_address:
-            initial_window.destroy()  # Close the IP entry window
-            connect_to_server(ip_address)  # Try to connect to the server
-
-    # Button to connect to the server
-    connect_button = tk.Button(initial_window, text="Connect", command=on_connect_button_click)
-    connect_button.pack(pady=20)
-
-    # Start the Tkinter event loop for the initial window
-    initial_window.mainloop()
-
+# Main entry point
 if __name__ == "__main__":
-    start_initial_window()
+    # Ask for the IP address of the server
+    ip_address = simpledialog.askstring("Enter server IP", "Please enter the server IP address:")
+    if ip_address:
+        connect_to_server(ip_address)
+    else:
+        print("IP address is required.")
