@@ -51,7 +51,7 @@ def start_shutdown_timer(server_socket, start_time):
 # Main function to set up the server
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(('158.120.28.251', 12975))  # Binding to all available IP addresses on port 5555
+    server.bind(('25.2.47.86', 2620))  # Binding to all available IP addresses on port 5555
     server.listen(5)
     print("Server is listening for connections...")
 
